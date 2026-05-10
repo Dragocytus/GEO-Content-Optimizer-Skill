@@ -105,10 +105,7 @@ GEO-Content-Optimizer-Skill/
 
 参考了开源项目思路：https://github.com/bright-cn/geo-ai-agent ,
 特别感谢社区佬友： https://linux.do
- 
-
-参考了开源项目思路：https://github.com/bright-cn/geo-ai-agent ,
-特别感谢社区佬友： https://linux.do
+  
 
 ## License
 
