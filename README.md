@@ -40,8 +40,8 @@ URL → 抓取标题 → 查询扩展研究 → 提取主查询
 ### 安装
 
 ```bash
-git clone https://github.com/<your-username>/geo-ai-agent.git
-cd geo-ai-agent
+git clone https://github.com/liangdabiao/GEO-Content-Optimizer-Skill.git
+cd GEO-Content-Optimizer-Skill
 claude
 ```
 
@@ -88,7 +88,7 @@ Skill 会从 `.claude/skills/geo-content-optimizer/` 目录自动加载，无需
 ## 项目结构
 
 ```
-geo-ai-agent/
+GEO-Content-Optimizer-Skill/
 ├── .claude/
 │   └── skills/
 │       └── geo-content-optimizer/
