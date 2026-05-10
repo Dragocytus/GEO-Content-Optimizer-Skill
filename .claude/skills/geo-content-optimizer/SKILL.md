@@ -6,7 +6,7 @@ description: >
   当用户说"优化这个页面"、"分析这个网址"、"GEO 分析"、"内容优化"、"geo分析"或提供 URL
   并要求内容改进建议时触发。
 argument-hint: <url>
-allowed-tools: WebSearch, mcp__web_reader__webReader, Bash(agent-browser:*), mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_click, mcp__playwright__browser_close, Read, Write, Bash
+allowed-tools: WebSearch, mcp__web_reader__webReader, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_click, mcp__playwright__browser_close, Read, Write, Bash
 ---
 
 # GEO Content Optimizer
@@ -52,11 +52,9 @@ Store the output path as `OUTPUT_DIR`.
 ## Phase 1: Scrape Page Title
 
 1. Use `mcp__web_reader__webReader` to fetch the content of the URL.
-2. If web reader fails or returns insufficient data, use `agent-browser` as fallback:
-   ```bash
-   agent-browser navigate "<URL>"
-   agent-browser snapshot
-   ```
+2. If web reader fails or returns insufficient data, use Playwright MCP as fallback:
+   - Use `mcp__playwright__browser_navigate` to open the URL
+   - Use `mcp__playwright__browser_snapshot` to get the page content
 3. Extract the main title from the page. Look for:
    - The text inside `<h1>` tags
    - If no `<h1>`, use the `<title>` tag
@@ -97,20 +95,11 @@ From the query fan-out results:
 ## Phase 4: Google AI Overview Retrieval
 
 1. Use `WebSearch` to search for `MAIN_QUERY`. Look for AI Overview content in the search results.
-2. If the AI Overview is not captured by WebSearch, use browser automation to get it. **Prefer `agent-browser` first** (lightweight, fast), fall back to Playwright MCP only if agent-browser is unavailable:
-
-   **Option A — agent-browser (preferred):**
-   ```bash
-   agent-browser navigate "https://www.google.com/search?q=<encoded_MAIN_QUERY>"
-   agent-browser snapshot
-   ```
-   - Look for the AI Overview section (often labeled "AI 概览" / "AI Overview" or appears before organic results)
-   - Extract the AI Overview content
-
-   **Option B — Playwright MCP (fallback):**
+2. If the AI Overview is not captured by WebSearch, use Playwright MCP to get it:
    - Use `mcp__playwright__browser_navigate` to open the Google search URL
    - Use `mcp__playwright__browser_snapshot` to get the page content
-   - Extract the AI Overview section
+   - Look for the AI Overview section (often labeled "AI 概览" / "AI Overview" or appears before organic results)
+   - Extract the AI Overview content
 
 3. If no AI Overview is available after all attempts, generate one based on the search results and clearly mark it as "Generated (no live AI Overview found)".
 
@@ -183,7 +172,7 @@ Write the final report to `OUTPUT_DIR/report.md` with the following structure (a
 
 ## Important Notes
 
-- **Browser tool priority**: `agent-browser` (lightweight, Rust CLI) > Playwright MCP (heavy, Node.js). Always try agent-browser first for any browser interaction. Only fall back to Playwright if agent-browser is not installed or fails.
+- **Browser tool**: Use Playwright MCP (`mcp__playwright__browser_*`) for all browser interactions.
 - Execute phases sequentially — each phase depends on the previous one.
 - After completing all phases, inform the user that the report is ready at `OUTPUT_DIR/report.md`.
 - If any phase fails, report the issue and attempt to continue with available data.
