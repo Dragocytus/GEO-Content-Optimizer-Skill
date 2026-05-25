@@ -63,6 +63,8 @@ cd geo-start
 
 ```
 /geo-optimizer 帮我生成一个 Organization Schema，品牌名叫"星辰科技"，做跨境电商AI选品的
+
+/geo-optimizer 帮我全面检查geo情况，品牌名叫"高砖积木"，做积木的
 ```
 
 或者分析一个网页：
